@@ -3,14 +3,14 @@
 var color = $('.selected').css('background-color');
 
 //When clicking on control list items
-$('.controls li').click(function() {
+$('.controls').on('click', 'li', (function() {
   //Deselect sibling element
   $(this).siblings().removeClass('selected');
   //Select clicked element
   $(this).addClass('selected');
   //cache current color
   color = $(this).css('background-color');
-});
+}));
 
 
 //When new color  is pressed
@@ -33,9 +33,16 @@ function changeColor () {
 $('input[type=range]').change(changeColor);
 
 
-//When add color is pressed
+//When 'add color' is pressed
+$('#addNewColor').click(function() {
   //Append the color to the controls ul
+  var $newColor = $('<li></li>');
+  $newColor.css('background-color', $('#newColor').css('background-color'));
+  $('.controls ul').append($newColor)
   //Select the new color
+  $newColor.click();
+});
+
 
 //On mouse events on the canvas
   //Draw lines
@@ -48,3 +55,5 @@ $('input[type=range]').change(changeColor);
 // .removeClass()
 // .siblings() Get siblings of each element in the set of matched elements, optionaly filtred by a selector
 // .toggle() Display or hide matched elements
+// .on() eg$ ('.controls').on('click', 'li', (function() {})); bind .controls on click with the function performing on li
+
