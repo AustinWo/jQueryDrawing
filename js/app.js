@@ -1,6 +1,11 @@
 //Problem: No user interaction causes no change to application
 //Solution: When user interacts cause change appropriately
 var color = $('.selected').css('background-color');
+// document.getElementByTagName('canvas')[0] is the same as $('canvas')[0] to get the html element object because we need the .getContext();
+var $canvas = $('canvas');
+var context = $canvas[0].getContext('2d');
+var lastEvent;
+var mouseDown = false;
 
 //When clicking on control list items
 $('.controls').on('click', 'li', (function() {
@@ -44,8 +49,38 @@ $('#addNewColor').click(function() {
 });
 
 
-//On mouse events on the canvas
+//On mouse events on the canvas (this is mostly done in plain Javascript)
+$canvas.mousedown(function(e) {
+  lastEvent = e;
+  mouseDown = true;
+}).mousemove(function(e){
   //Draw lines
+  if(mouseDown) {
+  context.beginPath();
+  context.moveTo(lastEvent.offsetX, lastEvent.offsetY);
+  context.lineTo(e.offsetX, e.offsetY);
+  context.strokeStyle = color;
+  context.stroke();
+  lastEvent = e;
+  }
+}).mouseup(function(){
+  mouseDown = false;
+}).mouseleave(function(){
+  $canvas.mouseup()
+})
+
+
+
+  //Draw lines example without mouse
+  // context.beginPath();
+  // context.moveTo(10, 10);
+  // context.lineTo(20, 10);
+  // context.lineTo(20, 20);
+  // context.lineTo(10, 20);
+  // context.closePath();
+  // context.stroke();
+  // context.strokeStyle();
+
 
 
 // Methods used
@@ -57,3 +92,15 @@ $('#addNewColor').click(function() {
 // .toggle() Display or hide matched elements
 // .on() eg$ ('.controls').on('click', 'li', (function() {})); bind .controls on click with the function performing on li
 
+// HTML element methods to draw the line
+// .beginPath()
+// .moveTo()
+// .lineTo()
+// .closePath()
+// .stroke() draw line from 2 coordinates
+
+// jQuery methods for drawing
+// .mousedown()
+// .mosemove()
+// .moseup()
+// .mouseleave()
